@@ -1,0 +1,8 @@
+cd C:\Users\HP\OneDrive\Desktop\test\bot-headless-playwright
+docker build -t teams-bot .
+
+
+docker run -e MEETING_URL="https://teams.microsoft.com/meet/418583563255982?p=5ZxVlWw6ccXwSaruc2" -v ${PWD}:/app/videos teams-bot
+
+docker cp 420dd80283fc:/app/speaker_video.mp4 .
+docker cp 420dd80283fc:/app/shared_screen.mp4 .
