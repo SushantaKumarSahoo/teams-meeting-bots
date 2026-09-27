@@ -1,0 +1,22 @@
+The Microsoft Graph Media API is the "proper" enterprise way to record Teams meetings because it fundamentally processes the streams independently.
+
+Unlike the headless browser (which records a single composed picture of your screen), the C# Graph Media Bot connects directly to Microsoft's backend media platform and receives dedicated TCP/UDP sockets for:
+
+Raw Audio (16kHz PCM uncompressed audio)
+Main Speaker Video (H.264 or NV12 format)
+Screen Sharing/VBSS (Video Based Screen Sharing)
+It natively pulls these as completely separate, high-quality streams without any UI elements (no buttons, borders, or name tags).
+
+How to run it: The Catch
+Because this bot connects directly to Microsoft's core server infrastructure, you cannot simply run it locally with dotnet run right away. It requires a strict, secure handshake with Azure.
+
+To run this bot, you must complete the following Azure infrastructure setup:
+
+Register a Bot in Azure: You must create a Microsoft Entra ID (Azure AD) application to generate an App ID and Client Secret.
+Grant Graph API Permissions: Your Azure App needs application-level permissions granted by a tenant admin:
+Calls.AccessMedia.All
+Calls.JoinGroupCall.All
+Calls.JoinGroupCallAsGuest.All
+Public Endpoint (ngrok): Microsoft's servers need to send webhooks to your bot to establish the call. Your local machine needs a public URL (using ngrok or similar).
+Valid X.509 Certificate: The Microsoft Media Platform requires a strict Mutual-TLS connection. You cannot use a standard self-signed certificate; you must generate a specific X.509 certificate and tie it to your bot's configuration.
+All of these values then go into your bot-graph-media/appsettings.json file.
