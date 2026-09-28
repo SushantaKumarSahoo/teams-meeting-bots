@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  recall-clone:
+    build: .
+    image: recall-ai-clone
+    container_name: recall-ai-clone
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - BASE_URL=http://localhost:3000  # change to your public URL/ngrok for webhooks
+      - NODE_ENV=production
+    volumes:
+      # Persist recordings, transcripts and logs on your host
+      - ./output:/app/output
+    restart: unless-stopped
+    # Needed for Xvfb + PulseAudio inside the container
+    shm_size: '2gb'
+    cap_add:
+      - SYS_ADMIN
